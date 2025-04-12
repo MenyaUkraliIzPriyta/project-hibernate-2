@@ -1,10 +1,7 @@
 package org.example.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name= "film_text")
@@ -12,7 +9,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class FilmText {
+
+    @Id
+    @Column(name = "film_id")
+    private Short id;
 
     @OneToOne(cascade = CascadeType.ALL)
     @MapsId
@@ -24,5 +26,6 @@ public class FilmText {
 
     @Column(name = "description")
     private String description;
+
 
 }

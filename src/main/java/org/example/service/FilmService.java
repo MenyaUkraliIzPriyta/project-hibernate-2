@@ -18,10 +18,10 @@ public class FilmService {
     private TransactionManager txManager;
     private LanguageRepository languageRepository;
 
-    public Film newFilmWasReleased(String title, String releaseYear,
+    public Film newFilmWasReleased(String title, Year releaseYear,
                                    Integer rentalDuration, BigDecimal rentalRate,
                                    Integer length, BigDecimal rentalCost,
-                                   Rating rating, Set<String> specialsFeatures) {
+                                   Rating rating) {
         txManager.execute(session -> {
             Language language = languageRepository.findById(session, 1L);
             Language originalLanguage = languageRepository.findById(session, 4L);
@@ -32,20 +32,25 @@ public class FilmService {
                     .language(language)
                     .categories(categories)
                     .actors(actors)
-                    .rating(Rating.PG)
-                    .specialFeatures("Commentaries,Deleted Scenes,Behind the Scenes")
-                    .length((short) 100)
+                    .rating(rating)
+                    .length(100)
                     .replacementCost(BigDecimal.ZERO)
                     .rentalRate(BigDecimal.ZERO)
-                    .description("wow!")
-                    .title("Movie")
-                    .rentalDuration((byte) 52)
+                    .description("Amazing")
+                    .title(title)
+                    .rentalDuration(52)
                     .originalLanguage(language)
                     .year(Year.now())
                     .build();
             session.persist(film);
 
-            return null;
+            FilmText filmText = FilmText.builder()
+                    .film(film)
+                    .description("wow!")
+                    .title("Movie")
+                    .build();
+            session.persist(filmText);
+            return film;
         });
         return null;
     }
